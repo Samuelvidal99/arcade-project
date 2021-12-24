@@ -1,6 +1,6 @@
 var config = {
     type: Phaser.AUTO,
-    width: 636,
+    width: 836,
     height: 600,
     physics: {
         default: 'arcade',
@@ -89,10 +89,10 @@ function create() {
     testeAlien.setData('vector', new Phaser.Math.Vector2());
 
     graphics = this.add.graphics();
-    path = new Phaser.Curves.Path(100,400);
-    path.lineTo(500, 400);
-    path.lineTo(500, 500);
-    path.lineTo(100, 500);
+    path = new Phaser.Curves.Path(55,400);
+    path.lineTo(780, 400);
+    path.lineTo(780, 500);
+    path.lineTo(55, 500);
 
     this.tweens.add({
         targets: testeAlien,
@@ -101,7 +101,7 @@ function create() {
         duration: 6000,
         repeat: -1,
         yoyo: true,
-        delay: 100
+        delay: 1100
     });
 }
 
