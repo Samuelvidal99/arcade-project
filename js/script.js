@@ -83,11 +83,47 @@ function create() {
     // Setting key input. 
     cursors = this.input.keyboard.createCursorKeys();
     console.log(cursors.space)
+
+    // Path Testing
+    testeAlien = this.physics.add.sprite(100, 400, 'alienCrab');
+    testeAlien.setData('vector', new Phaser.Math.Vector2());
+
+    graphics = this.add.graphics();
+    path = new Phaser.Curves.Path(100,400);
+    path.lineTo(500, 400);
+    path.lineTo(500, 500);
+    path.lineTo(100, 500);
+
+    this.tweens.add({
+        targets: testeAlien,
+        z: 1,
+        ease: 'Linear',
+        duration: 6000,
+        repeat: -1,
+        yoyo: true,
+        delay: 100
+    });
 }
 
 // game.scene.pause("default");
 
 function update() {
+    // Teste
+    graphics.clear();
+
+    graphics.lineStyle(2, 0xffffff, 1);
+
+    path.draw(graphics);
+
+    path.getPoint(testeAlien.z, testeAlien.getData('vector'));
+    testeAlien.setPosition(testeAlien.getData('vector').x, testeAlien.getData('vector').y);
+
+    testeAlien.setDepth(testeAlien.y);
+
+    graphics.fillStyle(0xff0000, 1);
+    testeAlien.anims.play('idle', true)
+    // graphics.fillCircle(testeAlien.vec.x, testeAlien.vec.y, 12);
+
     alienCrab.anims.play('idle', true);
 
     // Setting initial speed and animation of the aliens group.
