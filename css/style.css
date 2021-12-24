@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    background-color: rgb(54, 54, 54);
+    display: grid;
+    justify-content: center;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    font-size: medium;
+}
