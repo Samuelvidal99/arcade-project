@@ -26,9 +26,13 @@ function preload() {
     });
 }
 // Setting Alien Crab velocity as a global variable
-var velocity = 100;
-var velocityAliensX = 100;
+var velocityX = 50;
+var velocityY = 0;
+var velocityAliensX = 50;
 var velocityAliensY = 0;
+var velocityInvertion = 8;
+
+var singleCrabVelocityX = 100;
 
 function create() {
     // Background
@@ -41,38 +45,36 @@ function create() {
     // Spawning 4 alien crabs
     aliens = this.physics.add.group({
         key: 'alienCrab',
-        repeat: 3,
+        repeat: 4,
         setXY: { x: 54, y: 40, stepX: 116 }
     });
 
-    // Function that makes the aliens not go out of the world's bounds
+    // Function that makes the aliens not go out of the world's bounds, and make them go down a bit.
     aliens.children.iterate( (child) => {
         this.events.on('update', () => {
             if(
-                !this.physics.world.bounds.contains(child.x + 51, child.y) ||
-                !this.physics.world.bounds.contains(child.x - 51, child.y)
+                (!this.physics.world.bounds.contains(child.x + 51, child.y) ||
+                !this.physics.world.bounds.contains(child.x - 51, child.y)) &&
+                (velocityAliensY == 0)
             ) {
-                // let aux = velocityAliensX;
-                // velocityAliensY = 100;
-                // velocityAliensX = 5;
-                // setTimeout(() => {
-                //     console.log("Timed out")
-                //     velocityAliensX = aux;
-                //     velocityAliensY = 0;
-
-
-                // }, 1000);
-                
-                //     console.log(velocityAliensX)
                 setTimeout(() => {
-                    console.log("Teste")
-                })
-                velocityAliensX = velocityAliensX * -1;
+                    console.log("velocity: " + velocityX)
+                    velocityAliensX = velocityX;
+                    velocityAliensY = velocityY;
+                    child.setVelocityX(velocityAliensX);
+                    child.setVelocityY(velocityAliensY);
+                }, 1000);
+                velocityInvertion = velocityInvertion * -1;
+                velocityAliensX = velocityInvertion;
+                velocityAliensY = 50;
+                velocityX = velocityX*-1;
                 child.setVelocityX(velocityAliensX);
+                child.setVelocityY(velocityAliensY);
             }
         })
     });
 
+    // Setting the main alien crab animation
     this.anims.create({
         key: "idle",
         frames: this.anims.generateFrameNumbers('alienCrab', { start: 0, end: 4 }),
@@ -83,49 +85,9 @@ function create() {
     // Setting key input. 
     cursors = this.input.keyboard.createCursorKeys();
     console.log(cursors.space)
-
-    // Path Testing
-    testeAlien = this.physics.add.sprite(100, 400, 'alienCrab');
-    testeAlien.setData('vector', new Phaser.Math.Vector2());
-
-    graphics = this.add.graphics();
-    path = new Phaser.Curves.Path(55,400);
-    path.lineTo(780, 400);
-    path.lineTo(780, 500);
-    path.lineTo(55, 500);
-
-    this.tweens.add({
-        targets: testeAlien,
-        z: 1,
-        ease: 'Linear',
-        duration: 6000,
-        repeat: -1,
-        yoyo: true,
-        delay: 1100
-    });
 }
 
-// game.scene.pause("default");
-
 function update() {
-    // Teste
-    graphics.clear();
-
-    graphics.lineStyle(2, 0xffffff, 1);
-
-    path.draw(graphics);
-
-    path.getPoint(testeAlien.z, testeAlien.getData('vector'));
-    testeAlien.setPosition(testeAlien.getData('vector').x, testeAlien.getData('vector').y);
-
-    testeAlien.setDepth(testeAlien.y);
-
-    graphics.fillStyle(0xff0000, 1);
-    testeAlien.anims.play('idle', true)
-    // graphics.fillCircle(testeAlien.vec.x, testeAlien.vec.y, 12);
-
-    alienCrab.anims.play('idle', true);
-
     // Setting initial speed and animation of the aliens group.
     aliens.children.iterate(function (child) {
 
@@ -134,14 +96,18 @@ function update() {
         child.setVelocityY(velocityAliensY);
     });
 
+    // Single crab to test purpose 
+    alienCrab.anims.play('idle', true);
+
     if(alienCrab.body.onWall()) {
-        velocity = velocity * -1;
-        alienCrab.setVelocityX(velocity);
+        singleCrabVelocityX = singleCrabVelocityX * -1;
+        alienCrab.setVelocityX(singleCrabVelocityX);
     }
     else {
-        alienCrab.setVelocityX(velocity);
+        alienCrab.setVelocityX(singleCrabVelocityX);
     }
 
+    // Space key pause the game.
     if (cursors.space.isDown) {
         game.scene.pause("default");
         console.log(game.scene)
