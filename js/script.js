@@ -24,6 +24,10 @@ function preload() {
         frameWidth: 100,
         frameHeight: 70,
     });
+    this.load.spritesheet('beetleShip', 'assets/beetleship.png', {
+        frameWidth: 100,
+        frameHeight: 120,
+    });
 }
 // Setting Alien Crab velocity as a global variable
 var velocityX = 50;
@@ -82,9 +86,21 @@ function create() {
         repeat: -1
     });
 
+    // Setting beetleship sprite and animations
+    beetleShip = this.physics.add.sprite(425, 550, 'beetleShip');
+    beetleShip.setCollideWorldBounds(true);
+
+    this.anims.create({
+        key: "idleBeetleShip",
+        frames: this.anims.generateFrameNumbers('beetleShip', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
     // Setting key input. 
     cursors = this.input.keyboard.createCursorKeys();
-    console.log(cursors.space)
+    keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 }
 
 function update() {
@@ -106,7 +122,19 @@ function update() {
     else {
         alienCrab.setVelocityX(singleCrabVelocityX);
     }
+    
+    // Starting idle animations and velocity of the beetleship.
+    beetleShip.anims.play('idleBeetleShip', true);
 
+    if(cursors.left.isDown || keyA.isDown) {
+        beetleShip.setVelocityX(-200);
+    }
+    else if(cursors.right.isDown || keyD.isDown) {
+        beetleShip.setVelocityX(200);
+    }
+    else {
+        beetleShip.setVelocityX(0);
+    }
     // Space key pause the game.
     if (cursors.space.isDown) {
         game.scene.pause("default");
