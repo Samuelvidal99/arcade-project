@@ -32,6 +32,10 @@ function preload() {
         frameWidth: 100,
         frameHeight: 120,
     });
+    this.load.spritesheet('energyBall', 'assets/energy-ball.png', {
+        frameWidth: 24,
+        frameHeight: 24,
+    });
 }
 // Setting Alien Crab velocity as a global variable
 var velocityX = 50;
@@ -59,6 +63,8 @@ function create() {
         repeat: 4,
         setXY: { x: 54, y: 40, stepX: 116 }
     });
+
+    energyBall = this.physics.add.sprite(250, 350, 'energyBall');
 
     // Function that makes the aliens not go out of the world's bounds, and make them go down a bit.
     aliens.children.iterate( (child) => {
@@ -110,6 +116,13 @@ function create() {
         frameRate: 1,
     });
 
+    // Setting energy ball animation
+    this.anims.create({
+        key: "energyBall",
+        frames: this.anims.generateFrameNumbers('energyBall', { start: 0, end: 3 }),
+        frameRate: 10,
+    });
+
     // Setting key input. 
     cursors = this.input.keyboard.createCursorKeys();
     keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -124,6 +137,8 @@ function update() {
         child.setVelocityX(velocityAliensX);
         child.setVelocityY(velocityAliensY);
     });
+
+    energyBall.anims.play('energyBall', true);
 
     // Single crab to test purpose 
     alienCrab.anims.play('idle', true);
@@ -149,7 +164,7 @@ function update() {
             beetleShip.anims.play('shootingBeetleShip');
             setTimeout(() => {
                 beetleShip.anims.play('idleBeetleShip', true);
-            }, 100);
+            }, 200);
             flipFlop = true;
         }
     }
