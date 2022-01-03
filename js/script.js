@@ -28,6 +28,10 @@ function preload() {
         frameWidth: 100,
         frameHeight: 120,
     });
+    this.load.spritesheet('shootingBeetleShip', 'assets/beetleship-shoot_animation.png', {
+        frameWidth: 100,
+        frameHeight: 120,
+    });
 }
 // Setting Alien Crab velocity as a global variable
 var velocityX = 50;
@@ -37,6 +41,9 @@ var velocityAliensY = 0;
 var velocityInvertion = 8;
 
 var singleCrabVelocityX = 100;
+
+// Shooting timer as global variable
+var shootingTimerShip = true;
 
 function create() {
     // Background
@@ -97,6 +104,12 @@ function create() {
         repeat: -1
     });
 
+    this.anims.create({
+        key: "shootingBeetleShip",
+        frames: this.anims.generateFrameNumbers('shootingBeetleShip', { start: 0, end: 1 }),
+        frameRate: 1,
+    });
+
     // Setting key input. 
     cursors = this.input.keyboard.createCursorKeys();
     keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -123,21 +136,31 @@ function update() {
         alienCrab.setVelocityX(singleCrabVelocityX);
     }
     
-    // Starting idle animations and velocity of the beetleship.
-    beetleShip.anims.play('idleBeetleShip', true);
-
+    // Starting idle animations, shoot animation and velocity of the beetleship.
     if(cursors.left.isDown || keyA.isDown) {
         beetleShip.setVelocityX(-200);
     }
     else if(cursors.right.isDown || keyD.isDown) {
         beetleShip.setVelocityX(200);
     }
-    else {
+    else if(cursors.space.isDown) {
         beetleShip.setVelocityX(0);
+        if(!flipFlop) {
+            beetleShip.anims.play('shootingBeetleShip');
+            setTimeout(() => {
+                beetleShip.anims.play('idleBeetleShip', true);
+            }, 100);
+            flipFlop = true;
+        }
+    }
+    else {
+        beetleShip.anims.play('idleBeetleShip', true);
+        beetleShip.setVelocityX(0);
+        flipFlop = false;
     }
     // Space key pause the game.
-    if (cursors.space.isDown) {
-        game.scene.pause("default");
-        console.log(game.scene)
-    }
+    // if (cursors.space.isDown) {
+    //     game.scene.pause("default");
+    //     console.log(game.scene)
+    // }
 }
