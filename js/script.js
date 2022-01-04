@@ -174,8 +174,8 @@ function update() {
         flipFlop = false;
     }
     // Space key pause the game.
-    // if (cursors.space.isDown) {
-    //     game.scene.pause("default");
-    //     console.log(game.scene)
-    // }
+    if (cursors.up.isDown) {
+        game.scene.pause("default");
+        console.log(game.scene)
+    }
 }
