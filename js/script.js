@@ -50,6 +50,50 @@ var singleCrabVelocityX = 100;
 var shootingTimerShip = true;
 
 function create() {
+
+    var Bullet = new Phaser.Class({
+
+        Extends: Phaser.Physics.Arcade.Sprite,
+
+        initialize:
+
+        function Bullet (scene)
+        {
+            Phaser.Physics.Arcade.Sprite.call(this, scene, 0, 0, 'energyBall');
+
+            this.speed = Phaser.Math.GetSpeed(400, 1);
+        },
+
+        fire: function (x, y)
+        {
+            this.setPosition(x, y - 50);
+
+            this.setActive(true);
+            this.setVisible(true);
+        },
+
+        update: function (time, delta)
+        {
+            this.y -= this.speed * delta;
+
+            this.anims.play('energyBall', true);
+
+            if (this.y < -50)
+            {
+                this.setActive(false);
+                this.setVisible(false);
+            }
+        }
+
+    });
+
+    bullets = this.add.group({
+        defaultKey: "bullet",
+        classType: Bullet,
+        maxSize: 10,
+        runChildUpdate: true,
+    });
+
     // Background
     this.add.image(268, 300, 'game-background');
 
@@ -129,7 +173,7 @@ function create() {
     keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 }
 
-function update() {
+function update(time, delta) {
     // Setting initial speed and animation of the aliens group.
     aliens.children.iterate(function (child) {
 
@@ -160,7 +204,15 @@ function update() {
     }
     else if(cursors.space.isDown) {
         beetleShip.setVelocityX(0);
+
         if(!flipFlop) {
+            var bullet = bullets.get();
+            if (bullet)
+            {
+                bullet.fire(beetleShip.x, beetleShip.y);
+                lastFired = time + 10;
+            }
+
             beetleShip.anims.play('shootingBeetleShip');
             setTimeout(() => {
                 beetleShip.anims.play('idleBeetleShip', true);
@@ -173,7 +225,7 @@ function update() {
         beetleShip.setVelocityX(0);
         flipFlop = false;
     }
-    // Space key pause the game.
+    // Up key pause the game.
     if (cursors.up.isDown) {
         game.scene.pause("default");
         console.log(game.scene)
