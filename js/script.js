@@ -76,6 +76,7 @@ function create() {
             this.shipX = x;
             this.setActive(true);
             this.setVisible(true);
+            this.enableBody()
         },
 
         update: function (time, delta)
@@ -235,16 +236,19 @@ function update(time, delta) {
         flipFlop = false;
     }
     // Up key pause the game.
-    // if (cursors.up.isDown) {
-    //     game.scene.pause("default");
-    //     console.log(game.scene)
-    // }
+    if (cursors.up.isDown) {
+        game.scene.pause("default");
+        console.log(game.scene)
+    }
 }
 
 function killAlien(bullet, alien) {
-
+    console.log("Colidindo")
     aliens.killAndHide(alien);
     alien.disableBody();
+    bullet.setActive(false);
+    bullet.setVisible(false);
+    bullet.disableBody()
 }
 
 function killBeetleShip(bullet, beetleShip) {
