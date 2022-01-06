@@ -36,6 +36,10 @@ function preload() {
         frameWidth: 24,
         frameHeight: 24,
     });
+    this.load.spritesheet('purpleBubble', 'assets/purple-bubble.png', {
+        frameWidth: 32,
+        frameHeight: 32,
+    });
 }
 // Setting Alien Crab velocity as a global variable
 var velocityX = 50;
@@ -111,6 +115,7 @@ function create() {
     });
 
     energyBall = this.physics.add.sprite(250, 350, 'energyBall');
+    purpleBubble = this.physics.add.sprite(150, 350, 'purpleBubble');
 
     // Function that makes the aliens not go out of the world's bounds, and make them go down a bit.
     aliens.children.iterate( (child) => {
@@ -134,6 +139,13 @@ function create() {
                 child.setVelocityY(velocityAliensY);
             }
         })
+    });
+
+    this.anims.create({
+        key: "purpleBubble",
+        frames: this.anims.generateFrameNumbers('purpleBubble', { start: 0, end: 2 }),
+        frameRate: 4,
+        repeat: -1
     });
 
     // Setting the main alien crab animation
@@ -190,6 +202,7 @@ function update(time, delta) {
     });
 
     energyBall.anims.play('energyBall', true);
+    purpleBubble.anims.play('purpleBubble', true);
     
     // Starting idle animations, shoot animation and velocity of the beetleship.
     if(cursors.left.isDown || keyA.isDown) {
