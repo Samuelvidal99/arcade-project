@@ -63,19 +63,21 @@ function create() {
             scene.add.existing(this);
             scene.physics.add.existing(this);
             this.speed = Phaser.Math.GetSpeed(400, 1);
+            this.shipX = 0;
         },
 
         fire: function (x, y)
         {
             this.setPosition(x, y - 50);
-
+            this.shipX = x;
             this.setActive(true);
             this.setVisible(true);
         },
 
         update: function (time, delta)
         {
-            this.y -= this.speed * delta;
+            this.y -= this.speed * 25;
+            this.x = this.shipX;
 
             this.anims.play('energyBall', true);
 
@@ -236,8 +238,10 @@ function update(time, delta) {
 }
 
 function teste(alien, bullet) {
-    console.log("Funcionou")
-    console.log(alien)
-    console.log(bullet)
+
     // aliens.killAndHide(alien);
+    aliens.killAndHide(bullet)
+    console.log("Matou")
+    // console.log(aliens.killAndHide)
+    // game.scene.pause("default");
 }
