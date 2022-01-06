@@ -60,7 +60,8 @@ function create() {
         function Bullet (scene)
         {
             Phaser.Physics.Arcade.Sprite.call(this, scene, 0, 0, 'energyBall');
-
+            scene.add.existing(this);
+            scene.physics.add.existing(this);
             this.speed = Phaser.Math.GetSpeed(400, 1);
         },
 
@@ -167,6 +168,8 @@ function create() {
         frameRate: 10,
     });
 
+    this.physics.add.collider(aliens, bullets, teste);
+
     // Setting key input. 
     cursors = this.input.keyboard.createCursorKeys();
     keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -230,4 +233,11 @@ function update(time, delta) {
         game.scene.pause("default");
         console.log(game.scene)
     }
+}
+
+function teste(alien, bullet) {
+    console.log("Funcionou")
+    console.log(alien)
+    console.log(bullet)
+    // aliens.killAndHide(alien);
 }
