@@ -100,6 +100,9 @@ function create() {
     // Background
     this.add.image(268, 300, 'game-background');
 
+    gameOverText = this.add.text(200, 200, 'PERDEU O JOGO', { fontSize: '64px', fill: '#FF0000' });
+    gameOverText.setVisible(false);
+
     // Setting Alien Crab attributes.
     alienCrab = this.physics.add.sprite(250, 150, 'alienCrab');
     alienCrab.setCollideWorldBounds(true);
@@ -169,7 +172,11 @@ function create() {
         frameRate: 10,
     });
 
+    // Setting collision between aliens and bullets
     this.physics.add.collider(aliens, bullets, killAlien);
+
+    // Setting collision between aliens and beetleship
+    this.physics.add.collider(aliens, beetleShip, killBeetleShip);
 
     // Setting key input. 
     cursors = this.input.keyboard.createCursorKeys();
@@ -230,14 +237,19 @@ function update(time, delta) {
         flipFlop = false;
     }
     // Up key pause the game.
-    if (cursors.up.isDown) {
-        game.scene.pause("default");
-        console.log(game.scene)
-    }
+    // if (cursors.up.isDown) {
+    //     game.scene.pause("default");
+    //     console.log(game.scene)
+    // }
 }
 
 function killAlien(bullet, alien) {
 
-    aliens.killAndHide(alien)
-    alien.disableBody()
+    aliens.killAndHide(alien);
+    alien.disableBody();
+}
+
+function killBeetleShip(bullet, beetleShip) {
+    gameOverText.setVisible(true);
+    game.scene.pause("default");
 }
