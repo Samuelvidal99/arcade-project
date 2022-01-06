@@ -103,10 +103,6 @@ function create() {
     gameOverText = this.add.text(200, 200, 'PERDEU O JOGO', { fontSize: '64px', fill: '#FF0000' });
     gameOverText.setVisible(false);
 
-    // Setting Alien Crab attributes.
-    alienCrab = this.physics.add.sprite(250, 150, 'alienCrab');
-    alienCrab.setCollideWorldBounds(true);
-
     // Spawning 4 alien crabs
     aliens = this.physics.add.group({
         key: 'alienCrab',
@@ -194,17 +190,6 @@ function update(time, delta) {
     });
 
     energyBall.anims.play('energyBall', true);
-
-    // Single crab to test purpose 
-    alienCrab.anims.play('idle', true);
-
-    if(alienCrab.body.onWall()) {
-        singleCrabVelocityX = singleCrabVelocityX * -1;
-        alienCrab.setVelocityX(singleCrabVelocityX);
-    }
-    else {
-        alienCrab.setVelocityX(singleCrabVelocityX);
-    }
     
     // Starting idle animations, shoot animation and velocity of the beetleship.
     if(cursors.left.isDown || keyA.isDown) {
