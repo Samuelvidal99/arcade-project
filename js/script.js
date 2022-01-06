@@ -122,7 +122,6 @@ function create() {
                 (velocityAliensY == 0)
             ) {
                 setTimeout(() => {
-                    console.log("velocity: " + velocityX)
                     velocityAliensX = velocityX;
                     velocityAliensY = velocityY;
                     child.setVelocityX(velocityAliensX);
@@ -170,7 +169,7 @@ function create() {
         frameRate: 10,
     });
 
-    this.physics.add.collider(aliens, bullets, teste);
+    this.physics.add.collider(aliens, bullets, killAlien);
 
     // Setting key input. 
     cursors = this.input.keyboard.createCursorKeys();
@@ -237,11 +236,8 @@ function update(time, delta) {
     }
 }
 
-function teste(alien, bullet) {
+function killAlien(bullet, alien) {
 
-    // aliens.killAndHide(alien);
-    aliens.killAndHide(bullet)
-    console.log("Matou")
-    // console.log(aliens.killAndHide)
-    // game.scene.pause("default");
+    aliens.killAndHide(alien)
+    alien.disableBody()
 }
