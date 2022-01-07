@@ -51,6 +51,8 @@ var velocityAliensX = 50;
 var velocityAliensY = 0;
 var velocityInvertion = 8;
 
+var availableAliens = [];
+
 function create() {
 
     // Defining the bullets group.
@@ -105,6 +107,11 @@ function create() {
                 child.setVelocityY(velocityAliensY);
             }
         })
+    });
+
+    // Populating the availabelAliens Array
+    aliens01.children.entries.forEach(alien => {
+        availableAliens.push(alien);
     });
 
     this.anims.create({
@@ -245,13 +252,18 @@ function killBeetleShip(bullet, beetleShip) {
 }
 
 function alien01Shoot() {
-    var index = Phaser.Math.Between(0, 4);
-    alien = aliens01.children.entries[index]
-    if(alien.active) {
-        var purpleBubble = purpleBubbles.get();
-        if(purpleBubble) {
-            purpleBubble.fire(alien.x, alien.y);
-            lastFired = 100 + 10;
+    availableAliens.forEach(alien => {
+        if(alien.active == false) {
+            aux = availableAliens.findIndex(value => value === alien);
+            availableAliens.splice(aux, 1);
         }
+    });
+    var index = Phaser.Math.Between(0, (availableAliens.length - 1));
+    alien = availableAliens[index]
+
+    var purpleBubble = purpleBubbles.get();
+    if(purpleBubble && (availableAliens.length > 0)) {
+        purpleBubble.fire(alien.x, alien.y);
+        lastFired = 100 + 10;
     }
 }
