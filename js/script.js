@@ -1,3 +1,5 @@
+// const  { PurpleBubble } = require('./bullets'); 
+
 var config = {
     type: Phaser.AUTO,
     width: 836,
@@ -55,46 +57,7 @@ var shootingTimerShip = true;
 
 function create() {
 
-    var Bullet = new Phaser.Class({
-
-        Extends: Phaser.Physics.Arcade.Sprite,
-
-        initialize:
-
-        function Bullet (scene)
-        {
-            Phaser.Physics.Arcade.Sprite.call(this, scene, 0, 0, 'energyBall');
-            scene.add.existing(this);
-            scene.physics.add.existing(this);
-            this.speed = Phaser.Math.GetSpeed(400, 1);
-            this.shipX = 0;
-        },
-
-        fire: function (x, y)
-        {
-            this.setPosition(x, y - 50);
-            this.shipX = x;
-            this.setActive(true);
-            this.setVisible(true);
-            this.enableBody()
-        },
-
-        update: function (time, delta)
-        {
-            this.y -= this.speed * 25;
-            this.x = this.shipX;
-
-            this.anims.play('energyBall', true);
-
-            if (this.y < -50)
-            {
-                this.setActive(false);
-                this.setVisible(false);
-            }
-        }
-
-    });
-
+    // Defining the bullets group.
     bullets = this.add.group({
         defaultKey: "bullet",
         classType: Bullet,
@@ -102,21 +65,27 @@ function create() {
         runChildUpdate: true,
     });
 
-    // Background
+    // Defining the purpleBubbles group.
+    purpleBubbles = this.add.group({
+        defaultKey: "purpleBubble",
+        classType: PurpleBubble,
+        maxSize: 10,
+        runChildUpdate: true,
+    });
+
+    // Background.
     this.add.image(268, 300, 'game-background');
 
+    // Text that appears when the player dies.
     gameOverText = this.add.text(200, 200, 'PERDEU O JOGO', { fontSize: '64px', fill: '#FF0000' });
     gameOverText.setVisible(false);
 
-    // Spawning 4 alien crabs
+    // Spawning 4 alien crabs.
     aliens = this.physics.add.group({
         key: 'alienCrab',
         repeat: 4,
         setXY: { x: 54, y: 40, stepX: 116 }
     });
-
-    energyBall = this.physics.add.sprite(250, 350, 'energyBall');
-    purpleBubble = this.physics.add.sprite(150, 350, 'purpleBubble');
 
     // Function that makes the aliens not go out of the world's bounds, and make them go down a bit.
     aliens.children.iterate( (child) => {
@@ -145,7 +114,7 @@ function create() {
     this.anims.create({
         key: "purpleBubble",
         frames: this.anims.generateFrameNumbers('purpleBubble', { start: 0, end: 2 }),
-        frameRate: 4,
+        frameRate: 10,
         repeat: -1
     });
 
@@ -201,9 +170,6 @@ function update(time, delta) {
         child.setVelocityX(velocityAliensX);
         child.setVelocityY(velocityAliensY);
     });
-
-    energyBall.anims.play('energyBall', true);
-    purpleBubble.anims.play('purpleBubble', true);
     
     // Starting idle animations, shoot animation and velocity of the beetleship.
     if(cursors.left.isDown || keyA.isDown) {
@@ -222,7 +188,14 @@ function update(time, delta) {
                 bullet.fire(beetleShip.x, beetleShip.y);
                 lastFired = time + 10;
             }
-
+            // teste
+            var purpleBubble = purpleBubbles.get();
+            if (purpleBubble)
+            {
+                purpleBubble.fire(beetleShip.x+ 100, beetleShip.y);
+                lastFired = time + 10;
+            }
+            // teste
             beetleShip.anims.play('shootingBeetleShip');
             setTimeout(() => {
                 beetleShip.anims.play('idleBeetleShip', true);
@@ -246,6 +219,7 @@ function killAlien(bullet, alien) {
     console.log("Colidindo")
     aliens.killAndHide(alien);
     alien.disableBody();
+    
     bullet.setActive(false);
     bullet.setVisible(false);
     bullet.disableBody()
