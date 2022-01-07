@@ -1,4 +1,3 @@
-// const  { PurpleBubble } = require('./bullets'); 
 
 var config = {
     type: Phaser.AUTO,
@@ -166,6 +165,7 @@ function create() {
     // Setting collision between beetleship and purpleBubble
     this.physics.add.collider(purpleBubbles, collisionBox, killBeetleShip);
 
+    // Setting collision between bullets and purpleBubble
     this.physics.add.collider(purpleBubbles, bullets, killBulletBubble);
 
     // Setting key input. 
