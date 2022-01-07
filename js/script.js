@@ -42,6 +42,7 @@ function preload() {
         frameWidth: 32,
         frameHeight: 32,
     });
+    this.load.image('collisionBox', 'assets/collision-box.png');
 }
 // Setting Alien Crab velocity as a global variable
 var velocityX = 50;
@@ -76,14 +77,14 @@ function create() {
     gameOverText.setVisible(false);
 
     // Spawning 4 alien crabs.
-    aliens = this.physics.add.group({
+    aliens01 = this.physics.add.group({
         key: 'alienCrab',
         repeat: 4,
         setXY: { x: 54, y: 40, stepX: 116 }
     });
 
     // Function that makes the aliens not go out of the world's bounds, and make them go down a bit.
-    aliens.children.iterate( (child) => {
+    aliens01.children.iterate( (child) => {
         this.events.on('update', () => {
             if(
                 (!this.physics.world.bounds.contains(child.x + 51, child.y) ||
@@ -121,9 +122,13 @@ function create() {
         repeat: -1
     });
 
-    // Setting beetleship sprite and animations
+    // Setting beetleship sprite and animations.
     beetleShip = this.physics.add.sprite(425, 550, 'beetleShip');
     beetleShip.setCollideWorldBounds(true);
+
+    // Setting collisionBox that follows the ship.
+    collisionBox = this.physics.add.sprite(425, 550, 'collisionBox');
+    collisionBox.setVisible(false);
 
     this.anims.create({
         key: "idleBeetleShip",
@@ -146,10 +151,13 @@ function create() {
     });
 
     // Setting collision between aliens and bullets
-    this.physics.add.collider(aliens, bullets, killAlien);
+    this.physics.add.collider(aliens01, bullets, killAlien);
 
     // Setting collision between aliens and beetleship
-    this.physics.add.collider(aliens, beetleShip, killBeetleShip);
+    this.physics.add.collider(aliens01, beetleShip, killBeetleShip);
+
+    // Setting collision between beetleship and purpleBubble
+    this.physics.add.collider(purpleBubbles, collisionBox, killBeetleShip);
 
     // Setting key input. 
     cursors = this.input.keyboard.createCursorKeys();
@@ -159,13 +167,13 @@ function create() {
     this.time.addEvent({
         delay: 2000,
         loop: true,
-        callback: alienShoot
+        callback: alien01Shoot
     });
 }
 
 function update(time, delta) {
     // Setting initial speed and animation of the aliens group.
-    aliens.children.iterate(function (child) {
+    aliens01.children.iterate(function (child) {
 
         child.anims.play('idle', true);
         child.setVelocityX(velocityAliensX);
@@ -175,9 +183,11 @@ function update(time, delta) {
     // Starting idle animations, shoot animation and velocity of the beetleship.
     if(cursors.left.isDown || keyA.isDown) {
         beetleShip.setVelocityX(-200);
+        collisionBox.setX(beetleShip.x);
     }
     else if(cursors.right.isDown || keyD.isDown) {
         beetleShip.setVelocityX(200);
+        collisionBox.setX(beetleShip.x);
     }
     else if(cursors.space.isDown) {
         beetleShip.setVelocityX(0);
@@ -210,7 +220,7 @@ function update(time, delta) {
 
 function killAlien(bullet, alien) {
     console.log("Colidindo")
-    aliens.killAndHide(alien);
+    aliens01.killAndHide(alien);
     alien.disableBody();
 
     bullet.setActive(false);
@@ -223,18 +233,15 @@ function killBeetleShip(bullet, beetleShip) {
     game.scene.pause("default");
 }
 
-function alienShoot() {
-    console.log(aliens.children.entries.length)
+function alien01Shoot() {
     var index = Phaser.Math.Between(0, 4);
-    alien = aliens.children.entries[index]
-    if(alien.enable == false) {
-        console.log("Morto")
-    }
-
-    var purpleBubble = purpleBubbles.get();
-    if (purpleBubble)
-    {
-        purpleBubble.fire(alien.x, alien.y);
-        lastFired = 100 + 10;
+    alien = aliens01.children.entries[index]
+    if(alien.active) {
+        var purpleBubble = purpleBubbles.get();
+        if (purpleBubble)
+        {
+            purpleBubble.fire(alien.x, alien.y);
+            lastFired = 100 + 10;
+        }
     }
 }
