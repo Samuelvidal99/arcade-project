@@ -50,11 +50,6 @@ var velocityAliensX = 50;
 var velocityAliensY = 0;
 var velocityInvertion = 8;
 
-var singleCrabVelocityX = 100;
-
-// Shooting timer as global variable
-var shootingTimerShip = true;
-
 function create() {
 
     // Defining the bullets group.
@@ -160,6 +155,12 @@ function create() {
     cursors = this.input.keyboard.createCursorKeys();
     keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
+    this.time.addEvent({
+        delay: 2000,
+        loop: true,
+        callback: alienShoot
+    });
 }
 
 function update(time, delta) {
@@ -188,14 +189,6 @@ function update(time, delta) {
                 bullet.fire(beetleShip.x, beetleShip.y);
                 lastFired = time + 10;
             }
-            // teste
-            var purpleBubble = purpleBubbles.get();
-            if (purpleBubble)
-            {
-                purpleBubble.fire(beetleShip.x+ 100, beetleShip.y);
-                lastFired = time + 10;
-            }
-            // teste
             beetleShip.anims.play('shootingBeetleShip');
             setTimeout(() => {
                 beetleShip.anims.play('idleBeetleShip', true);
@@ -219,7 +212,7 @@ function killAlien(bullet, alien) {
     console.log("Colidindo")
     aliens.killAndHide(alien);
     alien.disableBody();
-    
+
     bullet.setActive(false);
     bullet.setVisible(false);
     bullet.disableBody()
@@ -228,4 +221,20 @@ function killAlien(bullet, alien) {
 function killBeetleShip(bullet, beetleShip) {
     gameOverText.setVisible(true);
     game.scene.pause("default");
+}
+
+function alienShoot() {
+    console.log(aliens.children.entries.length)
+    var index = Phaser.Math.Between(0, 4);
+    alien = aliens.children.entries[index]
+    if(alien.enable == false) {
+        console.log("Morto")
+    }
+
+    var purpleBubble = purpleBubbles.get();
+    if (purpleBubble)
+    {
+        purpleBubble.fire(alien.x, alien.y);
+        lastFired = 100 + 10;
+    }
 }

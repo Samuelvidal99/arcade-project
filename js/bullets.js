@@ -53,7 +53,7 @@ var PurpleBubble = new Phaser.Class({
     },
 
     fire: function(x, y) {
-        this.setPosition(x, y - 50);
+        this.setPosition(x, y);
         this.shipX = x;
         this.setActive(true);
         this.setVisible(true);
@@ -61,12 +61,12 @@ var PurpleBubble = new Phaser.Class({
     },
 
     update: function(time, delta) {
-        this.y -= this.speed * 25;
+        this.y += this.speed * 25;
         this.x = this.shipX;
 
         this.anims.play('purpleBubble', true);
 
-        if (this.y < -50)
+        if (this.y > 600)
         {
             this.setActive(false);
             this.setVisible(false);
