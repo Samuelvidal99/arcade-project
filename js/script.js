@@ -159,6 +159,8 @@ function create() {
     // Setting collision between beetleship and purpleBubble
     this.physics.add.collider(purpleBubbles, collisionBox, killBeetleShip);
 
+    this.physics.add.collider(purpleBubbles, bullets, killBulletBubble);
+
     // Setting key input. 
     cursors = this.input.keyboard.createCursorKeys();
     keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -194,8 +196,7 @@ function update(time, delta) {
 
         if(!flipFlop) {
             var bullet = bullets.get();
-            if (bullet)
-            {
+            if(bullet) {
                 bullet.fire(beetleShip.x, beetleShip.y);
                 lastFired = time + 10;
             }
@@ -228,6 +229,16 @@ function killAlien(bullet, alien) {
     bullet.disableBody()
 }
 
+function killBulletBubble(bullet, purpleBubble) {
+    bullet.setActive(false);
+    bullet.setVisible(false);
+    bullet.disableBody()
+
+    purpleBubble.setActive(false);
+    purpleBubble.setVisible(false);
+    purpleBubble.disableBody()
+}
+
 function killBeetleShip(bullet, beetleShip) {
     gameOverText.setVisible(true);
     game.scene.pause("default");
@@ -238,8 +249,7 @@ function alien01Shoot() {
     alien = aliens01.children.entries[index]
     if(alien.active) {
         var purpleBubble = purpleBubbles.get();
-        if (purpleBubble)
-        {
+        if(purpleBubble) {
             purpleBubble.fire(alien.x, alien.y);
             lastFired = 100 + 10;
         }
