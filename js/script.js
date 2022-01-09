@@ -261,9 +261,13 @@ function alien01Shoot() {
     var index = Phaser.Math.Between(0, (availableAliens.length - 1));
     alien = availableAliens[index]
 
-    var purpleBubble = purpleBubbles.get();
-    if(purpleBubble && (availableAliens.length > 0)) {
-        purpleBubble.fire(alien.x, alien.y);
-        lastFired = 100 + 10;
+    if(alien != undefined) {
+        if(alien.active != false) {
+            var purpleBubble = purpleBubbles.get();
+            if(purpleBubble && (availableAliens.length > 0)) {
+                purpleBubble.fire(alien.x, alien.y);
+                lastFired = 100 + 10;
+            }
+        }   
     }
 }
