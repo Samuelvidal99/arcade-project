@@ -21,7 +21,7 @@ var game = new Phaser.Game(config);
 
 function preload() {
     this.load.image('game-background', 'assets/game-background.png');
-    this.load.spritesheet('alienCrab', 'assets/teste.png', {
+    this.load.spritesheet('alienCrab', 'assets/alien-crab.png', {
         frameWidth: 100,
         frameHeight: 70,
     });
@@ -50,7 +50,7 @@ var velocityAliensX = 50;
 var velocityAliensY = 0;
 var velocityInvertion = 8;
 
-var availableAliens = [];
+var availableAliens01 = [];
 
 function create() {
 
@@ -110,7 +110,7 @@ function create() {
 
     // Populating the availabelAliens Array
     aliens01.children.entries.forEach(alien => {
-        availableAliens.push(alien);
+        availableAliens01.push(alien);
     });
 
     this.anims.create({
@@ -252,19 +252,19 @@ function killBeetleShip(bullet, beetleShip) {
 }
 
 function alien01Shoot() {
-    availableAliens.forEach(alien => {
+    availableAliens01.forEach(alien => {
         if(alien.active == false) {
-            aux = availableAliens.findIndex(value => value === alien);
-            availableAliens.splice(aux, 1);
+            aux = availableAliens01.findIndex(value => value === alien);
+            availableAliens01.splice(aux, 1);
         }
     });
-    var index = Phaser.Math.Between(0, (availableAliens.length - 1));
-    alien = availableAliens[index]
+    var index = Phaser.Math.Between(0, (availableAliens01.length - 1));
+    alien = availableAliens01[index]
 
     if(alien != undefined) {
         if(alien.active != false) {
             var purpleBubble = purpleBubbles.get();
-            if(purpleBubble && (availableAliens.length > 0)) {
+            if(purpleBubble && (availableAliens01.length > 0)) {
                 purpleBubble.fire(alien.x, alien.y);
                 lastFired = 100 + 10;
             }
