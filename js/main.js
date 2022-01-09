@@ -1,7 +1,7 @@
 
 var config = {
     type: Phaser.AUTO,
-    width: 836,
+    width: 1236,
     height: 600,
     physics: {
         default: 'arcade',
@@ -42,6 +42,10 @@ function preload() {
         frameHeight: 32,
     });
     this.load.image('collisionBox', 'assets/collision-box.png');
+    this.load.spritesheet('teste', 'assets/teste.png', {
+        frameWidth: 100,
+        frameHeight: 70,
+    });
 }
 // Setting Alien Crab velocity as a global variable
 var velocityX = 50;
@@ -51,6 +55,7 @@ var velocityAliensY = 0;
 var velocityInvertion = 8;
 
 var availableAliens01 = [];
+var availableAliens02 = [];
 
 function create() {
 
@@ -80,11 +85,17 @@ function create() {
     // Spawning 4 alien crabs.
     aliens01 = this.physics.add.group({
         key: 'alienCrab',
-        repeat: 4,
+        repeat: 7,
         setXY: { x: 54, y: 40, stepX: 116 }
     });
 
-    // Function that makes the aliens not go out of the world's bounds, and make them go down a bit.
+    teste = this.physics.add.group({
+        key: 'teste',
+        repeat: 7,
+        setXY: { x: 54, y: 115, stepX: 116 }
+    });
+
+    // Function that makes the aliens, all types, not go out of the world's bounds, and make them go down a bit.
     aliens01.children.iterate( (child) => {
         this.events.on('update', () => {
             if(
@@ -113,6 +124,10 @@ function create() {
         availableAliens01.push(alien);
     });
 
+    teste.children.entries.forEach(alien => {
+        availableAliens02.push(alien);
+    });
+
     this.anims.create({
         key: "purpleBubble",
         frames: this.anims.generateFrameNumbers('purpleBubble', { start: 0, end: 2 }),
@@ -124,6 +139,13 @@ function create() {
     this.anims.create({
         key: "idle",
         frames: this.anims.generateFrameNumbers('alienCrab', { start: 0, end: 4 }),
+        frameRate: 4,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: "teste",
+        frames: this.anims.generateFrameNumbers('teste', { start: 0, end: 4 }),
         frameRate: 4,
         repeat: -1
     });
@@ -158,6 +180,7 @@ function create() {
 
     // Setting collision between aliens and bullets
     this.physics.add.collider(aliens01, bullets, killAlien);
+    this.physics.add.collider(teste, bullets, killAlien02);
 
     // Setting collision between aliens and beetleship
     this.physics.add.collider(aliens01, beetleShip, killBeetleShip);
@@ -185,6 +208,13 @@ function update(time, delta) {
     aliens01.children.iterate(function (child) {
 
         child.anims.play('idle', true);
+        child.setVelocityX(velocityAliensX);
+        child.setVelocityY(velocityAliensY);
+    });
+
+    teste.children.iterate(function (child) {
+
+        child.anims.play('teste', true);
         child.setVelocityX(velocityAliensX);
         child.setVelocityY(velocityAliensY);
     });
@@ -223,51 +253,5 @@ function update(time, delta) {
     if (cursors.up.isDown) {
         game.scene.pause("default");
         console.log(game.scene)
-    }
-}
-
-function killAlien(bullet, alien) {
-    console.log("Colidindo")
-    aliens01.killAndHide(alien);
-    alien.disableBody();
-
-    bullet.setActive(false);
-    bullet.setVisible(false);
-    bullet.disableBody()
-}
-
-function killBulletBubble(bullet, purpleBubble) {
-    bullet.setActive(false);
-    bullet.setVisible(false);
-    bullet.disableBody()
-
-    purpleBubble.setActive(false);
-    purpleBubble.setVisible(false);
-    purpleBubble.disableBody()
-}
-
-function killBeetleShip(bullet, beetleShip) {
-    gameOverText.setVisible(true);
-    game.scene.pause("default");
-}
-
-function alien01Shoot() {
-    availableAliens01.forEach(alien => {
-        if(alien.active == false) {
-            aux = availableAliens01.findIndex(value => value === alien);
-            availableAliens01.splice(aux, 1);
-        }
-    });
-    var index = Phaser.Math.Between(0, (availableAliens01.length - 1));
-    alien = availableAliens01[index]
-
-    if(alien != undefined) {
-        if(alien.active != false) {
-            var purpleBubble = purpleBubbles.get();
-            if(purpleBubble && (availableAliens01.length > 0)) {
-                purpleBubble.fire(alien.x, alien.y);
-                lastFired = 100 + 10;
-            }
-        }   
     }
 }
