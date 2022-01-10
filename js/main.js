@@ -80,10 +80,6 @@ function create() {
     // Background.
     this.add.image(268, 300, 'game-background');
 
-    // Text that appears when the player dies.
-    gameOverText = this.add.text(200, 200, 'PERDEU O JOGO', { fontSize: '64px', fill: '#FF0000' });
-    gameOverText.setVisible(false);
-
     // Spawning 4 alien crabs.
     aliens01 = this.physics.add.group({
         key: 'alienCrab',
@@ -96,6 +92,10 @@ function create() {
         repeat: 7,
         setXY: { x: 54, y: 115, stepX: 116 }
     });
+
+    // Text that appears when the player dies.
+    gameOverText = this.add.text(200, 200, 'PERDEU O JOGO', { fontSize: '64px', fill: '#FF0000' });
+    gameOverText.setVisible(false);
 
     // Function that makes the aliens, all types, not go out of the world's bounds, and make them go down a bit.
     aliens01.children.iterate( (child) => {
