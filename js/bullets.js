@@ -1,5 +1,5 @@
 
-// BeetleShip Bullet
+// BeetleShip Bullet.
 var Bullet = new Phaser.Class({
 
     Extends: Phaser.Physics.Arcade.Sprite,
@@ -37,7 +37,7 @@ var Bullet = new Phaser.Class({
 
 });
 
-// Alien01 bullet
+// Alien01 bullet.
 var PurpleBubble = new Phaser.Class({
 
     Extends: Phaser.Physics.Arcade.Sprite,

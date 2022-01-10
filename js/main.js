@@ -47,7 +47,7 @@ function preload() {
         frameHeight: 70,
     });
 }
-// Setting Alien Crab velocity as a global variable
+// Setting Alien Crab velocity as a global variable.
 var velocityX = 50;
 var velocityY = 0;
 var velocityAliensX = 50;
@@ -140,7 +140,7 @@ function create() {
         repeat: -1
     });
 
-    // Setting the main alien crab animation
+    // Setting the main alien crab animation.
     this.anims.create({
         key: "idle",
         frames: this.anims.generateFrameNumbers('alienCrab', { start: 0, end: 4 }),
@@ -176,24 +176,24 @@ function create() {
         frameRate: 1,
     });
 
-    // Setting energy ball animation
+    // Setting energy ball animation.
     this.anims.create({
         key: "energyBall",
         frames: this.anims.generateFrameNumbers('energyBall', { start: 0, end: 3 }),
         frameRate: 10,
     });
 
-    // Setting collision between aliens and bullets
+    // Setting collision between aliens and bullets.
     this.physics.add.collider(aliens01, bullets, killAlien);
     this.physics.add.collider(teste, bullets, killAlien);
 
-    // Setting collision between aliens and beetleship
+    // Setting collision between aliens and beetleship.
     this.physics.add.collider(aliens01, beetleShip, killBeetleShip);
 
-    // Setting collision between beetleship and purpleBubble
+    // Setting collision between beetleship and purpleBubble.
     this.physics.add.collider(purpleBubbles, collisionBox, killBeetleShip);
 
-    // Setting collision between bullets and purpleBubble
+    // Setting collision between bullets and purpleBubble.
     this.physics.add.collider(purpleBubbles, bullets, killBulletBubble);
 
     // Setting key input. 
