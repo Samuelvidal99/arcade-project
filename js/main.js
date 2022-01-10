@@ -121,7 +121,7 @@ function create() {
         })
     });
 
-    // Populating the availabelAliens array.
+    // Populating the availableAliens array.
     aliens01.children.entries.forEach(alien => {
         availableAliens01.push(alien);
     });
