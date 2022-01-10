@@ -1,32 +1,25 @@
 
 function killAlien(bullet, alien) {
-    // console.log("Colidindo")
-    aliens01.killAndHide(alien);
+    let alienGroup;
+    groups.forEach(group => {
+        alienGroup = ((group.contains(alien)) ? group : alienGroup);
+    });
+    alienGroup.killAndHide(alien);
     alien.disableBody();
 
     bullet.setActive(false);
     bullet.setVisible(false);
-    bullet.disableBody()
-}
-
-function killAlien02(bullet, alien) {
-    // console.log("Colidindo")
-    teste.killAndHide(alien);
-    alien.disableBody();
-
-    bullet.setActive(false);
-    bullet.setVisible(false);
-    bullet.disableBody()
+    bullet.disableBody();
 }
 
 function killBulletBubble(bullet, purpleBubble) {
     bullet.setActive(false);
     bullet.setVisible(false);
-    bullet.disableBody()
+    bullet.disableBody();
 
     purpleBubble.setActive(false);
     purpleBubble.setVisible(false);
-    purpleBubble.disableBody()
+    purpleBubble.disableBody();
 }
 
 function killBeetleShip(bullet, beetleShip) {

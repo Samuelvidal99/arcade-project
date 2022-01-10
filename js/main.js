@@ -57,6 +57,8 @@ var velocityInvertion = 8;
 var availableAliens01 = [];
 var availableAliens02 = [];
 
+var groups = [];
+
 function create() {
 
     // Defining the bullets group.
@@ -119,7 +121,7 @@ function create() {
         })
     });
 
-    // Populating the availabelAliens Array
+    // Populating the availabelAliens array.
     aliens01.children.entries.forEach(alien => {
         availableAliens01.push(alien);
     });
@@ -127,6 +129,9 @@ function create() {
     teste.children.entries.forEach(alien => {
         availableAliens02.push(alien);
     });
+
+    // Populating the groups array.
+    groups.push(aliens01, teste);
 
     this.anims.create({
         key: "purpleBubble",
@@ -180,7 +185,7 @@ function create() {
 
     // Setting collision between aliens and bullets
     this.physics.add.collider(aliens01, bullets, killAlien);
-    this.physics.add.collider(teste, bullets, killAlien02);
+    this.physics.add.collider(teste, bullets, killAlien);
 
     // Setting collision between aliens and beetleship
     this.physics.add.collider(aliens01, beetleShip, killBeetleShip);
